@@ -63,6 +63,12 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(err => {
+        newNotification(
+          `Information did not saved, check name and number`,
+          1
+        )
+      })
     }
   }
 
