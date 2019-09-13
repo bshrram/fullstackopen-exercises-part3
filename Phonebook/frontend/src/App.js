@@ -47,6 +47,8 @@ const App = () => {
             setPersons(
               persons.map(p => (p.id !== foundPerson.id ? p : returnedPerson))
             )
+            setNewName('')
+            setNewNumber('')
           })
           .catch(err => {
             newNotification(
@@ -65,7 +67,7 @@ const App = () => {
       })
       .catch(err => {
         newNotification(
-          `Information did not saved, check name and number`,
+          err.response.data.error,
           1
         )
       })

@@ -32,10 +32,12 @@ app.post('/api/persons', (request, response, next) => {
     number: body.number
   })
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson.toJSON())
-  })
-  .catch(error => next(error))
+  person
+    .save()
+    .then(savedPerson => {
+      response.json(savedPerson.toJSON())
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons', (request, response) => {
@@ -55,10 +57,8 @@ app.get('/info', (req, res) => {
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
-      if (person)
-        response.json(person.toJSON())
-      else
-        response.status(404).end()
+      if (person) response.json(person.toJSON())
+      else response.status(404).end()
     })
     .catch(err => next(err))
 })
@@ -67,16 +67,13 @@ app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(result => {
       console.log(result)
-      if (result)
-        response.status(204).end()
-      else
-        response.status(404).end()
+      if (result) response.status(204).end()
+      else response.status(404).end()
     })
     .catch(err => next(err))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  
   const body = request.body
   console.log(body)
   const person = {
@@ -85,10 +82,8 @@ app.put('/api/persons/:id', (request, response, next) => {
   }
   Person.findByIdAndUpdate(request.params.id, person, { new: true })
     .then(updatedPerson => {
-      if (updatedPerson)
-        response.json(updatedPerson.toJSON())
-      else
-        response.status(404).end()
+      if (updatedPerson) response.json(updatedPerson.toJSON())
+      else response.status(404).end()
     })
     .catch(err => next(err))
 })
@@ -104,8 +99,7 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'malformatted id' })
-  }
-  else if (error.name === 'ValidationError'){
+  } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
 
